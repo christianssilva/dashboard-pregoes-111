@@ -1723,7 +1723,7 @@ footer{margin-top:30px;font-size:12px;color:var(--ink-muted);text-align:center;l
         backBtn.onclick = function() { detalheItem(tr); };
         modalBody.appendChild(backBtn);
         var ifrm = mk('iframe');
-        ifrm.src = 'http://127.0.0.1:8080/?cnpj=' + cnpjStr;
+        ifrm.src = 'http://127.0.0.1:8033/?cnpj=' + cnpjStr;
         ifrm.style.cssText = 'width: 100%; height: 75vh; border: 1px solid var(--border); border-radius: 8px; background: #fff;';
         modalBody.appendChild(ifrm);
       };
