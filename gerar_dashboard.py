@@ -247,6 +247,14 @@ def classificar_status(r: dict, hoje: datetime) -> str:
 
 def etl(linhas: list[dict]) -> dict:
     hoje = datetime.now()
+    # ⚠️ Compensação de bug do extrator: "Qtd Homologada" vinha do site como
+    # "100.0000" (ponto decimal, 4 casas) e o robô fazia .replace(".","") →
+    # inflava o valor em ×10000. Detecta a corrupção no NÍVEL DO ARQUIVO (quase
+    # todos múltiplos de 10000) para recuperar com segurança e se AUTO-CURAR
+    # numa coleta futura já corrigida (aí a proporção cai e nada é dividido).
+    _qh = [num(r.get("Qtd Homologada")) for r in linhas]
+    _qh = [q for q in _qh if q and q > 0]
+    qhom_x10000 = bool(_qh) and sum(1 for q in _qh if q % 10000 == 0) / len(_qh) > 0.95
     itens = []          # linhas da UASG alvo com saldo calculável
     datas_coleta = []
     for r in linhas:
@@ -257,6 +265,14 @@ def etl(linhas: list[dict]) -> dict:
             datas_coleta.append(d)
         saldo, vu = num(r.get("Qtd. Saldo")), num(r.get("Val. Unitário"))
         cap = round(saldo * vu, 2) if (saldo is not None and vu is not None) else None
+        # Qtd Homologada corrigida (÷10000 se a coluna estiver corrompida) e
+        # Valor Total recalculado dela × valor unitário (a coluna do arquivo tem
+        # o mesmo ×10000). Só afeta essas duas colunas — saldo/vu/capacidade não.
+        qhom = num(r.get("Qtd Homologada"))
+        if qhom is not None and qhom_x10000:
+            qhom = qhom / 10000
+        vtot = (round(qhom * vu, 2) if (qhom is not None and vu is not None)
+                else num(r.get("Valor_Total_Homologado")))
         pregao = str(r.get("Pregão") or "").replace("_", "/")
         ger = str(r.get("UASG_Gerenciadora") or "")
         itens.append({
@@ -280,8 +296,8 @@ def etl(linhas: list[dict]) -> dict:
             "cod": str(r.get("CATMAT_CATSER_Codigo") or "").strip(),
             "conf": str(r.get("Confianca_ND") or "").strip(),
             "ini": data_br(r.get("Início Vig Ata")),
-            "vtot": num(r.get("Valor_Total_Homologado")),
-            "qhom": num(r.get("Qtd Homologada")),
+            "vtot": vtot,
+            "qhom": qhom,
             "qaut": num(r.get("Qtd. Autorizada")),
             "stlabel": str(r.get("Status_Ata") or "").strip(),
         })
