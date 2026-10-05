@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Dashboard "Capacidade de Empenho" — Atas de Registro de Preços (BCMS).
+"""Dashboard "Capacidade de Empenho" — Atas de Registro de Preços (111ª Cia Ap MB).
 
 Lê o consolidado do Robô Extrator de Pregões (Consolidado_Pregoes.xlsx, nome
 fixo no Google Drive → link estável), calcula a capacidade de empenho
@@ -13,7 +13,7 @@ Uso:
 Ambiente:
   DRIVE_FILE_ID  ID do arquivo no Drive (ou usa o padrão embutido)
   SOURCE_XLSX    caminho local (tem precedência; para teste)
-  UASG_ALVO      prefixo da UASG participante (padrão: 160329 = BCMS)
+  UASG_ALVO      prefixo da UASG participante (padrão: 160264 = 111ª Cia Ap MB)
 """
 
 from __future__ import annotations
@@ -38,9 +38,9 @@ DATA = os.path.join(BASE, "data")
 # pessoa com o link). Pode ser sobrescrito pelo secret/variável DRIVE_FILE_ID.
 DRIVE_FILE_ID_PADRAO = "1H_5CZZuejjAPN2H5c2FCITzaQhBHZXSW"
 
-UASG_ALVO = os.environ.get("UASG_ALVO", "160329").strip()
-NOME_UNIDADE = os.environ.get("NOME_UNIDADE", "Batalhão Central de Manutenção e Suprimento")
-NOME_CURTO = os.environ.get("NOME_CURTO", "BCMS")
+UASG_ALVO = os.environ.get("UASG_ALVO", "160264").strip()
+NOME_UNIDADE = os.environ.get("NOME_UNIDADE", "111ª Companhia de Apoio de Material Bélico")
+NOME_CURTO = os.environ.get("NOME_CURTO", "111ª Cia Ap MB")
 
 # Unidade "primária" — a que vira index.html no site multi-unidade. As demais
 # viram <slug>.html. `main()` gera uma página por OMDS com dados (looping por
@@ -59,18 +59,8 @@ AUSENTE = "Informação ausente"
 #
 # ⚠️ Confirme os nomes oficiais de BMSA e ECT.
 UNIDADES = [
-    {"sigla": "BCMS",    "nome": "Batalhão Central de Manutenção e Suprimento",
-     "uasg": "160329", "logo": "BCMS.png",  "accent": "#DB2819"},
-    {"sigla": "Ba Ap Log", "nome": "Base de Apoio Logístico do Exército",
-     "uasg": "160238", "logo": "BaApLog.png", "accent": "#D83030"},
-    {"sigla": "1º D Sup", "nome": "1º Depósito de Suprimento",
-     "uasg": "160307", "logo": "1DSUP.png", "accent": "#DE2B30"},
-    {"sigla": "BMSA",    "nome": "BMSA",
-     "uasg": "160304", "logo": "BMSA.png",  "accent": "#DB2819"},
-    {"sigla": "D C Mun", "nome": "Depósito Central de Munição",
-     "uasg": "160246", "logo": "DCMUN.png", "accent": "#047CC0"},
-    {"sigla": "ECT",     "nome": "ECT",
-     "uasg": "160321", "logo": "Ect.png",   "accent": "#B33338"},
+    {"sigla": "111ª Cia Ap MB",    "nome": "111ª Companhia de Apoio de Material Bélico",
+     "uasg": "160264", "logo": "111ª Cia Ap MB.png",  "accent": "#DB2819"},
 ]
 
 # UASG → sigla das OMDS que conhecemos (o consolidado só traz o número da UASG
@@ -86,7 +76,7 @@ def unidade_ativa() -> dict:
         if u["uasg"] == UASG_ALVO:
             return u
     return {"sigla": NOME_CURTO, "nome": NOME_UNIDADE, "uasg": UASG_ALVO,
-            "logo": "BCMS.png", "accent": "#DB2819"}
+            "logo": "111ª Cia Ap MB.png", "accent": "#DB2819"}
 
 
 def unidades_json() -> str:
