@@ -36,7 +36,7 @@ DATA = os.path.join(BASE, "data")
 
 # ID do Consolidado_Pregoes.xlsx no Google Drive (Compartilhar → qualquer
 # pessoa com o link). Pode ser sobrescrito pelo secret/variável DRIVE_FILE_ID.
-DRIVE_FILE_ID_PADRAO = "1Jp2lSSR1m_FofvlwJbcOUT9wCXxG6785"
+DRIVE_FILE_ID_PADRAO = "1H_5CZZuejjAPN2H5c2FCITzaQhBHZXSW"
 
 UASG_ALVO = os.environ.get("UASG_ALVO", "160329").strip()
 NOME_UNIDADE = os.environ.get("NOME_UNIDADE", "Batalhão Central de Manutenção e Suprimento")
